@@ -1,3 +1,4 @@
+//all code here is from a pervious assignment so it is uncommented
 
 const fs = require('fs');
 

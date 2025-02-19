@@ -1,15 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Our simple HTTP server</title>
+  <meta charset="UTF-8">
+  <title>Pokemon API Client</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
-  <script>
-
-  </script>
 </head>
 <body>
+  <h1>Pokemon API Client</h1>
+  
+  <section>
+    <h2>Search Pokemon by Name</h2>
+    <form id="searchForm">
+      <input type="text" name="name" placeholder="Enter Pokemon name" required>
+      <button type="submit">Search</button>
+    </form>
+    <pre id="searchResult"></pre>
+  </section>
 
+  <section>
+    <h2>Search Pokemon by Weakness</h2>
+    <form id="searchWeaknessForm">
+      <input type="text" name="weakness" placeholder="Enter weakness" required>
+      <button type="submit">Search</button>
+    </form>
+    <pre id="searchWeaknessResult"></pre>
+  </section>
+
+  <section>
+    <h2>Search Pokemon by Type</h2>
+    <form id="searchTypeForm">
+      <input type="text" name="type" placeholder="Enter type" required>
+      <button type="submit">Search</button>
+    </form>
+    <pre id="searchTypeResult"></pre>
+  </section>
+  
+  <section>
+    <h2>Add a New Pokemon</h2>
+    <form id="addForm">
+      <input type="text" name="name" placeholder="Pokemon Name" required><br>
+      <input type="text" name="type" placeholder="Type (comma separated)" required><br>
+      <input type="text" name="weaknesses" placeholder="Weaknesses (comma separated)" required><br>
+      <button type="submit">Add Pokemon</button>
+    </form>
+    <pre id="addResult"></pre>
+  </section>
+  
+  <section>
+    <h2>Edit an Existing Pokemon</h2>
+    <form id="editForm">
+      <input type="text" name="name" placeholder="Pokemon Name (to edit)" required><br>
+      <input type="text" name="type" placeholder="New Type (comma separated)"><br>
+      <input type="text" name="weaknesses" placeholder="New Weaknesses (comma separated)"><br>
+      <button type="submit">Edit Pokemon</button>
+    </form>
+    <pre id="editResult"></pre>
+  </section>
+
+  <script>
+    //this is based on previous giphy finder project code that i dug up from the depths of my computer
+    document.querySelector('#searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      fetch(`/getPokemon?name=${encodeURIComponent(name)}`, { 
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('#searchResult').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.querySelector('#searchResult').innerText = 'Error: ' + error;
+      });
+    });
+
+    //weakness search
+    document.querySelector('#searchWeaknessForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const weakness = formData.get('weakness');
+      fetch(`/getPokemonWeakness?weakness=${encodeURIComponent(weakness)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('#searchWeaknessResult').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.querySelector('#searchWeaknessResult').innerText = 'Error: ' + error;
+      });
+    });
+
+    //type search
+    document.querySelector('#searchTypeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const type = formData.get('type');
+      fetch(`/getPokemonType?type=${encodeURIComponent(type)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('#searchTypeResult').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.querySelector('#searchTypeResult').innerText = 'Error: ' + error;
+      });
+    });
+
+    //add search by num here! (they should really allow you to like highlight comments)
+
+    //post request to add pokemon
+    document.querySelector('#addForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      let type = formData.get('type').split(',').map(s => s.trim());
+      let weaknesses = formData.get('weaknesses').split(',').map(s => s.trim());
+      const data = { name, type, weaknesses };
+
+      fetch('/addPokemon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('#addResult').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.querySelector('#addResult').innerText = 'Error: ' + error;
+      });
+    });
+
+    //post request to edit pokemon
+    document.querySelector('#editForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      let type = formData.get('type');
+      let weaknesses = formData.get('weaknesses');
+      const data = { name };
+      if (type) data.type = type.split(',').map(s => s.trim());
+      if (weaknesses) data.weaknesses = weaknesses.split(',').map(s => s.trim());
+
+      fetch('/editPokemon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        // For a 204 response, no content is returned.
+        if (response.status === 204) {
+          return { message: 'Pokemon updated successfully.' };
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.querySelector('#editResult').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.querySelector('#editResult').innerText = 'Error: ' + error;
+      });
+    });
+  </script>
 </body>
-
 </html>

@@ -4,10 +4,16 @@ const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-// the endpoints
+//all endpoints (only new code here)
 const urlStruct = {
   '/': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
+  '/getPokemon': jsonHandler.getPokemon,            //GET1
+  '/getPokemonType': jsonHandler.getPokemonType,       //GET2
+  '/getPokemonWeakness': jsonHandler.getPokemonWeakness, //GET3
+  '/getPokemonNum': jsonHandler.getPokemonNum,         //GET4
+  '/addPokemon': jsonHandler.addPokemon,               //POST1
+  '/editPokemon': jsonHandler.editPokemon,             //POST2
 };
 
 const onRequest = (request, response) => {
@@ -16,7 +22,9 @@ const onRequest = (request, response) => {
 
   if (urlStruct[parsedUrl.pathname]) {
     urlStruct[parsedUrl.pathname](request, response);
-  } 
+  } else {
+    jsonHandler.notFound(request, response);
+  }
 };
 
 http.createServer(onRequest).listen(port, () => {
