@@ -4,16 +4,17 @@ const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-//all endpoints (only new code here)
+// all endpoints (only new code here)
+// 4 GETs and 2 POSTs (6 total which i think is the requirement)
 const urlStruct = {
   '/': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
-  '/getPokemon': jsonHandler.getPokemon,            //GET1
-  '/getPokemonType': jsonHandler.getPokemonType,       //GET2
-  '/getPokemonWeakness': jsonHandler.getPokemonWeakness, //GET3
-  '/getPokemonNum': jsonHandler.getPokemonNum,         //GET4
-  '/addPokemon': jsonHandler.addPokemon,               //POST1
-  '/editPokemon': jsonHandler.editPokemon,             //POST2
+  '/getPokemon': jsonHandler.getPokemon, // GET1
+  '/getPokemonType': jsonHandler.getPokemonType, // GET2
+  '/getPokemonWeakness': jsonHandler.getPokemonWeakness, // GET3
+  '/getPokemonNum': jsonHandler.getPokemonNum, // GET4
+  '/addPokemon': jsonHandler.addPokemon, // POST1
+  '/editPokemon': jsonHandler.editPokemon, // POST2
 };
 
 const onRequest = (request, response) => {

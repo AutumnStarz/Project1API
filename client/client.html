@@ -103,7 +103,7 @@
       e.preventDefault();
       const formData = new FormData(e.target);
       const type = formData.get('type');
-      fetch(`/getPokemonType?type=${encodeURIComponent(type)}`, {
+      fetch(`/getPokemonType?type=${encodeURIComponent(type)}`, { //utilized ChatGPT code for this -> my mind cant comprehend how to type this
         method: 'GET',
         headers: {
           'Accept': 'application/json'
@@ -166,7 +166,6 @@
         body: JSON.stringify(data)
       })
       .then(response => {
-        // For a 204 response, no content is returned.
         if (response.status === 204) {
           return { message: 'Pokemon updated successfully.' };
         }
