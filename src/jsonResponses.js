@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const querystring = require('querystring'); // from node < https://nodejs.org/api/querystring.html
+const querystring = require('querystring'); // from node < https://nodejs.org/api/querystring.html <mainly for myy reference
 
 // TODO: test by sorting the pokedex array by various fields
 // add thinh in client to sort by num
 // maybe clean up html
 // make sure to test all the endpoints THOROUGHLY (im lookin at you, laaazy)
-// maybe i should put stuff ina  different file cuz this is getting long
+// use test to check the linter and clear out any errors 
 
 let pokedex; // array of pokemon
 try { // try to load the pokedex data
