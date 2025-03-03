@@ -246,8 +246,6 @@ const addPokemon = (request, response) => {
         const responseObj = { message: 'Invalid JSON format.', id: 'badRequest' };
         return respond(request, response, 400, responseObj);
       }
-    } else if (contentType === 'application/x-www-form-urlencoded') { // if the content type is not json (created using ChatGPT)
-      data = querystring.parse(body);
     } else {
       try {
         data = JSON.parse(body);
@@ -301,9 +299,7 @@ const editPokemon = (request, response) => {
         const responseObj = { message: 'Invalid JSON format.', id: 'badRequest' };
         return respond(request, response, 400, responseObj);
       }
-    } else if (contentType === 'application/x-www-form-urlencoded') { // if the content type is not json
-      data = querystring.parse(body);
-    } else {
+    }  else {
       try {
         data = JSON.parse(body);
       } catch (error) {
