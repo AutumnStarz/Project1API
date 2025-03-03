@@ -2,11 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring'); // from node < https://nodejs.org/api/querystring.html <mainly for myy reference
 
-// TODO: test by sorting the pokedex array by various fields
-// add thinh in client to sort by num
-// maybe clean up html
-// make sure to test all the endpoints THOROUGHLY (im lookin at you, laaazy)
-// use test to check the linter and clear out any errors 
+// TODO: Nothing i think <- someone who definitely is forgetting something
 
 let pokedex; // array of pokemon
 try { // try to load the pokedex data
@@ -299,7 +295,7 @@ const editPokemon = (request, response) => {
         const responseObj = { message: 'Invalid JSON format.', id: 'badRequest' };
         return respond(request, response, 400, responseObj);
       }
-    }  else {
+    } else {
       try {
         data = JSON.parse(body);
       } catch (error) {
